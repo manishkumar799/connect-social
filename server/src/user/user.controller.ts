@@ -15,15 +15,15 @@ const registerUser = async (req: Request, res: Response, next: NextFunction) => 
 const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
-    const token = await userService.loginUser(email, password);
-    res.cookie("token", token, {
-        httpOnly: false,
+    const user = await userService.loginUser(email, password);
+    res.cookie("token", user.token, {
+        httpOnly: true,
         secure: true, // Set to true in production with HTTPS
-        sameSite: "strict", // Required for cross-origin requests
+        sameSite: "none", // Required for cross-origin requests ""strict""
         maxAge: 3600000 * 24 * 7, // 1 hour in milliseconds
         path: "/",
     });
-    res.status(200).json({ ...token });
+    res.status(200).json({ ...user });
   } catch (err) {
     next(err);
   }

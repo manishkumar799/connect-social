@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 const MessageSchema = new Schema({
-    sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     content: String,
     chatType: { type: String, enum: ['personal', 'group'] },
     chatId: { type: mongoose.Schema.Types.ObjectId, ref: 'Chat' },

@@ -2,7 +2,10 @@ import {User, IUser } from "./../models/users";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-
+interface ILogin {
+  user:string;
+  token:string;
+}
 const registerUser = async (name: string, email: string, password: string): Promise<IUser | null> => {
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -21,7 +24,7 @@ const registerUser = async (name: string, email: string, password: string): Prom
   return newUser;
 };
 
-const loginUser = async (email: string, password: string): Promise<Object | null> => {
+const loginUser = async (email: string, password: string): Promise<ILogin> => {
   const user = await User.findOne({ email });
   if (!user) {
     throw new Error("Invalid credentials");

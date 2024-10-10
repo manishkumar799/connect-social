@@ -31,7 +31,14 @@ const initiateChat = async (currentUserId: string, newUserId: string) => {
 
   const getUserChats = async (userId: string) => {
     // Find all chats where the user is a member
-    const chats:any = await Chat.find({ members: userId }).populate('members', 'name email');
+    // const chats:any = await Chat.find({ members: userId }).populate('members', 'name email').populate("lastMessage","content timestamp sender").populate("sender","name");
+    const chats = await Chat.find({ members: userId })
+    .populate('members', 'name email')  // Populates the 'members' array with name and email fields
+    .populate({
+      path: 'lastMessage',
+      select: 'content timestamp sender',
+      populate: { path: 'sender', select: 'name' },  // Nested populate for 'sender'
+    });
   
     // Extract unique user IDs from chats
     const interactedUsers = new Set<string>();

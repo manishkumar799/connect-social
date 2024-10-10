@@ -16,7 +16,16 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 connectDB()
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://returnranger.ikshudigital.com",
+    ], // Your frontend URL
+    credentials: true, // Allow cookies and headers to be sent
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(responseFormatter);
@@ -28,7 +37,7 @@ app.get('/', (req: Request, res: Response) => {
 app.post('/api/auth/register',userController.registerUser);
 app.post('/api/auth/login',userController.loginUser);
 
-// app.use(tokenValidator)
+app.use(tokenValidator)
 app.use('/api',routes)
 // Start the server
 app.listen(PORT, () => {

@@ -18,6 +18,7 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+apiClient.defaults.withCredentials = true 
 
 // Login API call
 export const loginApi = async (credentials: LoginCredentials): Promise<LoginResponse> => {

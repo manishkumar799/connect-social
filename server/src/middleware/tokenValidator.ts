@@ -3,7 +3,6 @@ import {Request,Response, NextFunction} from "express";
 
 function tokenValidator(req:Request, res:Response, next:NextFunction) {
   const token = req.cookies.token;
-
   if (!token) {
     const error:any = new Error();
     error.message = "Access denied. No token provided.";
