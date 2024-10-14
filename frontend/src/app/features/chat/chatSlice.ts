@@ -49,7 +49,6 @@ export const allChats = createAsyncThunk(
   async () => {
     try {
       const data = await getAllChatsApi(); // Use the getAllChatsApi function from authApi.ts
-      console.log(data)
       return data; // Data contains the user and token
     } catch (err: any) {
       return err.response?.data?.message || 'allChats failed';
