@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './../../../hooks/useTypedSelector';
 import { login } from './authSlice';
 import { useNavigate } from 'react-router-dom';
@@ -8,13 +8,16 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState('');
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const { loading, error } = useAppSelector((state) => state.auth);
+    const { loading, error, isAuthenticated } = useAppSelector((state) => state.auth);
 
     const handleLogin = () => {
         dispatch(login({ email, password }));
-        navigate("/")
     };
-
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/");
+        }
+    }, [isAuthenticated, navigate]);
     return (
         <div className="relative py-3 sm:max-w-xs sm:mx-auto">
             <div

@@ -7,18 +7,18 @@ import axios from 'axios';
     chats:chatsList[]
   }
 
-  interface chatsList{
-    _id:string;
-    chatType:string;
-    members:membersList[];
-    lastInteraction:lastInteraction;
-    lastMessage:string;
+  interface chatsList {
+    _id: string;
+    chatType: string;
+    members: membersList[];
+    lastInteraction: string;
+    lastMessage: lastMessage;
   }
-
-  interface lastInteraction{
-    _id:string;
-    sender:sender;
-    content:string;
+  
+  interface lastMessage {
+    _id: string;
+    sender: sender;
+    content: string;
   }
 
   interface membersList{
