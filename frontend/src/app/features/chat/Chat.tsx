@@ -30,7 +30,7 @@ const Chat: React.FC = () => {
   return (
     <div>
       {chatLists.map((chat: chatsList) => (
-        <ChatCard key={chat._id} chat={chat} />
+        <ChatCard key={chat._id} chat={chat}/>
       ))}
     </div>
   );

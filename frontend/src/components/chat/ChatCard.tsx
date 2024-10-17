@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useAppSelector } from '../../hooks/useTypedSelector';
 
 interface ChatProp {
     chat: {
@@ -14,13 +14,13 @@ interface membersList{
     _id:string;
     name:string;
     email:string;
-  };
+};
 
 const ChatCard: React.FC<ChatProp> = ({ chat }) => {
-    const userName:any = chat.members.filter((member)=>member._id!="67017602c6d2c88200ae6029")
-    console.log(userName,"userName")
+    const { _id } = useAppSelector((state) => state.profile);
+    const userName:any = chat.members.filter((member)=>member._id!=_id)
     return (
-        <div className="w-full max-w-[290px] h-[70px] bg-[#353535] rounded-[20px] flex items-center justify-start backdrop-blur-[10px] transition-all ease-in-out duration-500 hover:cursor-pointer hover:transform hover:scale-[1.05]">
+        <div  onClick={()=>console.log(chat)} className="w-full max-w-[290px] h-[70px] bg-[#353535] rounded-[20px] flex items-center justify-start backdrop-blur-[10px] transition-all ease-in-out duration-500 hover:cursor-pointer hover:transform hover:scale-[1.05]">
             <div className="w-[50px] h-[50px] ml-[10px] rounded-[10px] bg-gradient-to-b from-[#d7cfcf] to-[#9198e5] transition-all ease-in-out duration-500 hover:bg-gradient-to-b hover:from-[#9198e5] hover:to-[#712020]"></div>
             <div className="w-[calc(100%-90px)] ml-[10px] text-white font-poppins">
                 <div className="flex items-center justify-between">

@@ -102,8 +102,7 @@ const initiateChat = async (currentUserId: string, newUserId: string) => {
     if (!chat) {
       return [];
     }
-  
-    return await Message.find({ chatId: chat._id }).sort({ timestamp: 1 });
+    return await Message.find({ chatId: chat._id }).sort({ timestamp: 1 }).populate("sender","name");
   };
   
   const getGroupMessages = async (groupId: string) => {
