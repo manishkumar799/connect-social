@@ -46,4 +46,23 @@ import axios from 'axios';
     const response = await apiClient.get<AllChatResponse>('/chat/chats');
     return response.data; // Axios automatically handles JSON responses
   };
+interface IPersonalMessages{
+  _id: string,
+  sender: {
+      _id: string,
+      name: string
+  },
+  content: string,
+  chatType: string,
+  chatId: string,
+}
+
+  export const fetchPersonalMessagesApi = async (recipientId:string): Promise<IPersonalMessages[]>=>{
+    const response = await apiClient.get<IPersonalMessages[]>(`/chat/messages/personal/${recipientId}`)
+    return response.data;
+  }
+  export const fetchGroupMessagesApi = async (groupId:string): Promise<any>=>{
+    const response = await apiClient.get<any>(`/chat/messages/personal/${groupId}`)
+    return response.data;
+  }
   
