@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchPersonalMessagesApi, getAllChatsApi } from './chatApi'; // Import the getAllChatsApi function
+import { fetchPersonalMessagesApi, getAllChatsApi,sendPersonalMessagesApi } from './chatApi'; // Import the getAllChatsApi function
 interface AllChatResponse {
     count: number;
     interactedUsers: string[];
@@ -40,6 +40,7 @@ interface AllChatResponse {
     count: number;
     chats: chatsList[];
     interactedUsers: string[];
+    recipientId:string|null;
     personalMessages: PersonalMessagesState[]; // Add this to store personal messages
     loading: boolean;
     error: any;
@@ -50,6 +51,7 @@ interface AllChatResponse {
     interactedUsers: [],
     chats: [],
     personalMessages: [], // Initialize as an empty array
+    recipientId: null, // Initialize as an empty array
     loading: false,
     error: null,
   };
@@ -64,6 +66,7 @@ interface AllChatResponse {
     content: string,
     chatType: string,
     chatId: string,
+    timestamp: string,
   }
 // Async thunk to handle login via API
 export const allChats = createAsyncThunk(
@@ -88,11 +91,30 @@ export const personalMessages = createAsyncThunk(
     }
   }
 );
+interface SendMessagePayload {
+  recipientId: string|null;
+  content: string;
+}
+export const sendPersonalMessage = createAsyncThunk(
+  'chat/messages/personal/send',
+  async ({recipientId,content}:SendMessagePayload) => {
+    try {
+      const data = await sendPersonalMessagesApi(recipientId,content); // Use the getAllChatsApi function from authApi.ts
+      return data; // Data contains the user and token
+    } catch (err: any) {
+      return err.response?.data?.message || 'Failed personal messages';
+    }
+  }
+);
 
 const chatSlice = createSlice({
   name: 'chat',
   initialState,
-  reducers:{},
+  reducers:{
+    setReceipientId:(state, action:PayloadAction<string>)=>{
+      state.recipientId=action.payload;
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -122,8 +144,21 @@ const chatSlice = createSlice({
       .addCase(personalMessages.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(sendPersonalMessage.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(sendPersonalMessage.fulfilled, (state, action: PayloadAction<PersonalMessagesState>) => {
+        state.loading = false;
+        console.log(action.payload);
+        state.personalMessages.push(action.payload); // Update personalMessages array
+      })
+      .addCase(sendPersonalMessage.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
-
+export const { setReceipientId } = chatSlice.actions;
 export default chatSlice.reducer;

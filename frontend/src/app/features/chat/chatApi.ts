@@ -55,10 +55,15 @@ interface IPersonalMessages{
   content: string,
   chatType: string,
   chatId: string,
+  timestamp: string,
 }
 
   export const fetchPersonalMessagesApi = async (recipientId:string): Promise<IPersonalMessages[]>=>{
     const response = await apiClient.get<IPersonalMessages[]>(`/chat/messages/personal/${recipientId}`)
+    return response.data;
+  }
+  export const sendPersonalMessagesApi = async (recipientId:string|null,content:string): Promise<IPersonalMessages>=>{
+    const response = await apiClient.post<IPersonalMessages>(`/chat/messages/personal`,{recipientId:recipientId,content:content})
     return response.data;
   }
   export const fetchGroupMessagesApi = async (groupId:string): Promise<any>=>{

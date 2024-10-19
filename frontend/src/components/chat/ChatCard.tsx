@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppSelector,useAppDispatch } from '../../hooks/useTypedSelector';
-import { personalMessages } from '../../app/features/chat/chatSlice';
+import { personalMessages, setReceipientId } from '../../app/features/chat/chatSlice';
 
 interface ChatProp {
     chat: {
@@ -23,8 +23,8 @@ const ChatCard: React.FC<ChatProp> = ({ chat }) => {
     const userName:any = chat.members.filter((member)=>member._id!=_id)
 
     const handleChatMessage = ()=>{
-        console.log(userName)
         dispatch(personalMessages(userName[0]._id))
+        dispatch(setReceipientId(userName[0]._id))
     }
     return (
         <div  onClick={handleChatMessage} className="w-full max-w-[290px] h-[70px] bg-[#353535] rounded-[20px] flex items-center justify-start backdrop-blur-[10px] transition-all ease-in-out duration-500 hover:cursor-pointer hover:transform hover:scale-[1.05]">

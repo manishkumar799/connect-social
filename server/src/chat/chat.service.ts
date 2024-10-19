@@ -90,7 +90,9 @@ const initiateChat = async (currentUserId: string, newUserId: string) => {
     chat.lastInteraction = new Date();
     await chat.save();
 
-    return message;
+    const populatedMessage = await message.populate('sender', 'name');
+
+    return populatedMessage;
   };
   
   const getPersonalMessages = async (senderId: string, recipientId: string) => {

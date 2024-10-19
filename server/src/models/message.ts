@@ -5,7 +5,7 @@ const MessageSchema = new Schema({
     content: String,
     chatType: { type: String, enum: ['personal', 'group'] },
     chatId: { type: mongoose.Schema.Types.ObjectId, ref: 'Chat' },
-    timestamp: Date
+    timestamp: { type: Date, default: Date.now }
   });
   
   export interface IMessage extends Document {

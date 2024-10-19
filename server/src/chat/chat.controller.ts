@@ -11,7 +11,7 @@ import ChatService from "./chat.service"; // Import the ChatService
 
   try {
     const message = await ChatService.sendPersonalMessage(senderId, recipientId, content);
-    res.status(200).json({ message });
+    res.status(200).json(message);
   } catch (error:any) {
     res.status(500).json({ error: error.message });
   }
@@ -25,7 +25,7 @@ import ChatService from "./chat.service"; // Import the ChatService
 
   try {
     const message = await ChatService.sendGroupMessage(senderId, groupId, content);
-    res.status(200).json({ message });
+    res.status(200).json(message);
   } catch (error:any) {
     res.status(500).json({ error: error.message });
   }

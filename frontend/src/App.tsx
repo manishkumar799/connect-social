@@ -20,7 +20,8 @@ const App: React.FC = () => {
         <div className=''>
           <input type="text" className='py-1 px-4 border rounded-xl flex items-center justify-center' placeholder='search' />
         </div>
-        <button onClick={() => dispatch(logout())}>Logout</button>
+        <button className='bg-blue-300'>Refresh</button>
+        <button className='bg-red-400' onClick={() => dispatch(logout())}>Logout</button>
       </div>
       <div className='mt-4 flex justify-start gap-4'>
         <div className='w-[20%]'>
