@@ -23,11 +23,11 @@ const App: React.FC = () => {
         <button className='bg-blue-300'>Refresh</button>
         <button className='bg-red-400' onClick={() => dispatch(logout())}>Logout</button>
       </div>
-      <div className='mt-4 flex justify-start gap-4'>
+      <div className='mt-4 flex justify-start gap-4 '>
         <div className='w-[20%]'>
           <Chat />
         </div>
-        <div className='border w-[80%] h-[70vh] p-4'><ChatDetails /></div>
+        <div className='w-[80%]  p-4'><ChatDetails /></div>
       </div>
     </div>
   );
