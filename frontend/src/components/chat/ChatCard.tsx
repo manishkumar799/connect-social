@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppSelector,useAppDispatch } from '../../hooks/useTypedSelector';
-import { personalMessages, setReceipientId } from '../../app/features/chat/chatSlice';
+import { personalMessages, setReceipientId ,setChatName} from '../../app/features/chat/chatSlice';
 
 interface ChatProp {
     chat: {
@@ -25,6 +25,8 @@ const ChatCard: React.FC<ChatProp> = ({ chat }) => {
     const handleChatMessage = ()=>{
         dispatch(personalMessages(userName[0]._id))
         dispatch(setReceipientId(userName[0]._id))
+        dispatch(setChatName(userName[0].name))
+
     }
     return (
         // <div  onClick={handleChatMessage} className="w-full max-w-[290px] h-[70px] bg-[#353535] rounded-[20px] flex items-center justify-start backdrop-blur-[10px] transition-all ease-in-out duration-500 hover:cursor-pointer hover:transform hover:scale-[1.05]">
@@ -39,7 +41,7 @@ const ChatCard: React.FC<ChatProp> = ({ chat }) => {
         // </div>
         <div
             onClick={handleChatMessage}
-            className="h-[60px] px-2 flex flex-row items-center relative gap-2 shadow-md bg-[#efeeee] p-2 custom-shadow border-2 border-slate-300 hover:cursor-pointer"
+            className="h-[60px] px-2 flex flex-row items-center relative gap-2 shadow-md bg-[#efeeee] p-2 custom-shadow border-2 border-slate-300 hover:cursor-pointer my-2"
           >
             <div className="">
               <img

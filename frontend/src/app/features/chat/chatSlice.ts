@@ -41,6 +41,7 @@ interface AllChatResponse {
     chats: chatsList[];
     interactedUsers: string[];
     recipientId:string|null;
+    chatName:string|null;
     personalMessages: PersonalMessagesState[]; // Add this to store personal messages
     loading: boolean;
     error: any;
@@ -52,6 +53,7 @@ interface AllChatResponse {
     chats: [],
     personalMessages: [], // Initialize as an empty array
     recipientId: null, // Initialize as an empty array
+    chatName: null, // Initialize as an empty array
     loading: false,
     error: null,
   };
@@ -114,6 +116,9 @@ const chatSlice = createSlice({
     setReceipientId:(state, action:PayloadAction<string>)=>{
       state.recipientId=action.payload;
     },
+    setChatName:(state, action:PayloadAction<string>)=>{
+      state.chatName=action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -160,5 +165,5 @@ const chatSlice = createSlice({
       });
   },
 });
-export const { setReceipientId } = chatSlice.actions;
+export const { setReceipientId,setChatName } = chatSlice.actions;
 export default chatSlice.reducer;
