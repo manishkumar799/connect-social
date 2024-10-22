@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useAppSelector, useAppDispatch } from '../../hooks/useTypedSelector';
-import { sendPersonalMessage } from '../../app/features/chat/chatSlice';
+import { sendPersonalMessage, setHidden } from '../../app/features/chat/chatSlice';
 import { BsEmojiSmile } from "react-icons/bs";
 import { MdCall, MdVideoCall } from "react-icons/md";
 import { TiAttachmentOutline } from "react-icons/ti";
 import { SlOptions } from "react-icons/sl";
+import moment from 'moment';
 
 
 const ChatDetails: React.FC = () => {
@@ -28,27 +29,32 @@ const ChatDetails: React.FC = () => {
   }
   if (!chatName) {
     return (
-      <div className="h-full w-full flex justify-center items-center">
+      <div className="h-full flex justify-center items-center flex-grow">
         Please select chat to start conversation...
       </div>
     )
   }
   return (
-    <div className="flexflex-col shadow-xl h-[610px] border">
+    <div className="flex flex-col flex-grow shadow-xl h-full border gap-0">
       {/* Header */}
-      <div className="px-4 flex items-center h-[63px] bg-white border">
-        <div className="w-[10%]">
+      <div className="px-4 flex justify-between items-center h-[70px] bg-white border w-full">
+        <div className=" flex gap-2">
+          <div className='sm:hidden'>
+            <div onClick={()=>dispatch(setHidden(false))} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 rounded-l">
+              Prev
+            </div>
+          </div>
           <img
             className="h-[50px] w-[50px] rounded-full border-x-2 hover:cursor-pointer"
             src="https://cdn-icons-png.flaticon.com/512/21/21104.png"
             alt=""
           />
+          <div className="">
+            <div className="font-bold text-lg">{chatName}</div>
+            <div className="text-[12px]">Last seen 30 minutes ago.</div>
+          </div>
         </div>
-        <div className="w-[70%]">
-          <div className="font-bold text-lg">{chatName}</div>
-          <div className="text-[12px]">Last seen 30 minutes ago.</div>
-        </div>
-        <div className="flex gap-7">
+        <div className='flex gap-7 items-center'>
           <div className="hover:cursor-pointer">
             <MdCall size={30} />
           </div>
@@ -65,7 +71,8 @@ const ChatDetails: React.FC = () => {
         //   ref={messageContainerRef}
         className="flex flex-col gap-2 px-6 w-full items-end py-1"
         style={{
-          maxHeight: "68vh",
+          // maxHeight: "auto",
+          marginBottom: "65px",
           overflowY: "auto",
           scrollbarWidth: "none",
           msOverflowStyle: "none",
@@ -85,13 +92,13 @@ const ChatDetails: React.FC = () => {
               className={`text-[10px]  justify-end ${showTime ? "flex" : "hidden"
                 }`}
             >
-              {item.timestamp}
+              {moment(item.timestamp).fromNow()}
             </span>
           </div>
         ))}
       </div>
       {/* Message Input */}
-      <div className="absolute h-[63px] w-full flex gap-2 justify-center items-center  bottom-0 shadow-xl border-2 border-bold border-t-[#B5C0D0]">
+      <div className="absolute h-[63px] w-full flex flex-grow gap-1 justify-center items-center  bottom-0 shadow-xl border-2 border-bold border-t-[#B5C0D0]">
         <div className=" inset-y-0 start-14 flex items-center hover:cursor-pointer">
           <BsEmojiSmile size={20} />
         </div>
@@ -109,11 +116,11 @@ const ChatDetails: React.FC = () => {
         />
         <button
           onClick={handleSendMessage}
-          className="flex items-center bg-blue-500 text-white gap-1 px-4 py-2 cursor-pointer font-semibold tracking-widest rounded-md hover:bg-blue-400 duration-300 hover:gap-2 hover:translate-x-3"
+          className="flex items-center bg-blue-500 text-white gap-1 px-4 py-2 cursor-pointer font-semibold tracking-widest rounded-md hover:bg-blue-400 duration-300 hover:gap-2 phover:translate-x-3"
         >
           Send
           <svg
-            className="w-5 h-5"
+            className="w-4 h-5"
             stroke="currentColor"
             stroke-width="1.5"
             viewBox="0 0 24 24"

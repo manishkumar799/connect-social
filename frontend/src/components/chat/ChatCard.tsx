@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAppSelector,useAppDispatch } from '../../hooks/useTypedSelector';
-import { personalMessages, setReceipientId ,setChatName} from '../../app/features/chat/chatSlice';
+import { personalMessages, setReceipientId ,setChatName,setHidden} from '../../app/features/chat/chatSlice';
+import moment from 'moment';
 
 interface ChatProp {
     chat: {
@@ -26,7 +27,7 @@ const ChatCard: React.FC<ChatProp> = ({ chat }) => {
         dispatch(personalMessages(userName[0]._id))
         dispatch(setReceipientId(userName[0]._id))
         dispatch(setChatName(userName[0].name))
-
+        dispatch(setHidden(true));
     }
     return (
         // <div  onClick={handleChatMessage} className="w-full max-w-[290px] h-[70px] bg-[#353535] rounded-[20px] flex items-center justify-start backdrop-blur-[10px] transition-all ease-in-out duration-500 hover:cursor-pointer hover:transform hover:scale-[1.05]">
@@ -60,7 +61,7 @@ const ChatCard: React.FC<ChatProp> = ({ chat }) => {
                 </div>
               </div>
               <div className="flex flex-col items-end gap-1 absolute right-1">
-                <div className="text-[12px] ">{chat?.lastInteraction}</div>
+                <div className="text-[12px] ">{moment(chat?.lastInteraction).fromNow()}</div>
                 <div className="text-[15px] rounded-full w-5 h-5 flex justify-center items-center border-2 border-black">
                   {1}
                 </div>

@@ -4,7 +4,7 @@ import { IoCall } from "react-icons/io5";
 import { MdMail, MdGroups2 } from "react-icons/md";
 const Menu: React.FC = () => {
     return (
-        <div className="flex justify-evenly items-center h-[63px] gap-2 bg-white px-4 shadow-xl border">
+        <div className="flex justify-evenly items-center h-[63px] gap-2 bg-white px-4 mb-2 border">
             <div className=" w-[15%] hover:cursor-pointer ">
                 <BsChatRightFill color="blue" size={20} />
             </div>
