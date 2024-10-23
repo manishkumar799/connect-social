@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchPersonalMessagesApi, getAllChatsApi,sendPersonalMessagesApi } from './chatApi'; // Import the getAllChatsApi function
+import { fetchPersonalMessagesApi, getAllChatsApi,sendPersonalMessagesApi, initiateChatApi } from './chatApi'; // Import the getAllChatsApi function
 interface AllChatResponse {
     count: number;
     interactedUsers: string[];
@@ -104,6 +104,17 @@ export const sendPersonalMessage = createAsyncThunk(
     }
   }
 );
+export const initiateChat = createAsyncThunk(
+  'chat/initiate-chat',
+  async (recipientId:string) => {
+    try {
+      const data = await initiateChatApi(recipientId); // Use the getAllChatsApi function from authApi.ts
+      return data; // Data contains the user and token
+    } catch (err: any) {
+      return err.response?.data?.message || 'Failed to initiate chat';
+    }
+  }
+);
 
 const chatSlice = createSlice({
   name: 'chat',
@@ -161,7 +172,19 @@ const chatSlice = createSlice({
       .addCase(sendPersonalMessage.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      });
+      })
+      .addCase(initiateChat.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(initiateChat.fulfilled, (state, action: PayloadAction<PersonalMessagesState[]>) => {
+        state.loading = false;
+        state.personalMessages=action.payload; // Update personalMessages array
+      })
+      .addCase(initiateChat.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
   },
 });
 export const { setReceipientId,setChatName,setHidden } = chatSlice.actions;

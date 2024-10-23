@@ -1,19 +1,65 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './hooks/useTypedSelector';
 import { logout } from './app/features/auth/authSlice';
 // import ChatCard from './components/chat/ChatCard';
-import { allChats } from './app/features/chat/chatSlice';
+import { allChats, initiateChat, setChatName, setReceipientId } from './app/features/chat/chatSlice';
 import Chat from './app/features/chat/Chat';
 import ChatDetails from './components/chat/ChatDetails';
 import { getProfile } from './app/features/profile/profileSlice';
 import Menu from './components/Menu';
+import { searchUserApi } from './services/api'
 
+interface IUser {
+  _id: string;
+  name: string;
+  email: string;
+}
 const App: React.FC = () => {
+  const [search, setSearch] = useState<string>('');
+  const [users, setUsers] = useState<IUser[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
   const hidden = useAppSelector((state) => state.chat.hidden);
-  dispatch(allChats())
-  dispatch(getProfile())
+  useEffect(() => {
+    dispatch(allChats())
+    dispatch(getProfile())
+  }, [])
+
+  const handleSearchUser = (query: string) => {
+    setSearch(query);
+  }
+  const handleNewChat=(user:any)=>{
+    dispatch(setChatName(user.name))
+    dispatch(setReceipientId(user._id))
+    dispatch(initiateChat(user._id))
+  }
+  
+  useEffect(() => {
+    const fetchUsers = async () => {
+      if (search.trim() === '') {
+        setUsers([]); // Reset users if search is empty
+        return;
+      }
+
+      setLoading(true);
+      setError(null); // Reset error state
+
+      try {
+        const response = await searchUserApi(search)
+        setUsers(response);
+      } catch (err) {
+        setError('Error fetching users. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const debounceFetch = setTimeout(fetchUsers, 300); // Debounce the search
+
+    return () => clearTimeout(debounceFetch); // Cleanup timeout on unmount
+  }, [search]);
   return (
     <div className='p-2 h-[100vh] flex flex-col overflow-hidden'>
       {/* Header Section */}
@@ -59,7 +105,18 @@ const App: React.FC = () => {
                 <path stroke="currentColor" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
               </svg>
             </div>
-            <input type="text" id="default-search" className="block w-full h-8 ps-10 text-sm text-gray-900 border border-gray-400 rounded-lg bg-gray-50 shadow-xl" placeholder="Search friends, groups..." required />
+            <input type="text" onChange={(e) => { handleSearchUser(e.target.value) }} id="default-search" className="block w-full h-8 ps-10 text-sm text-gray-900 border border-gray-400 rounded-lg bg-gray-50 shadow-xl" placeholder="Search friends, groups..." required />
+            {search.trim() && (
+              <div className="absolute top-8 w-full left-0 mt-4 z-10 bg-white shadow-lg p-4 rounded">
+                {loading && <p className="text-gray-500">Loading...</p>}
+                {error && <p className="text-red-500">{error}</p>}
+                <ul>
+                  {users.map(user => (
+                    <li key={user._id} onClick={()=>{handleNewChat(user)}} className="py-1 border-b">{user.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           <Chat />

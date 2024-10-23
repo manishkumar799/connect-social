@@ -6,7 +6,8 @@ interface ILogin {
   user:string;
   token:string;
 }
-const registerUser = async (name: string, email: string, password: string): Promise<IUser | null> => {
+
+const registerUser = async (name: string, email: string, password: string): Promise<ILogin> => {
   const existingUser = await User.findOne({ email });
   if (existingUser) {
     throw new Error("User already exists");
@@ -21,7 +22,8 @@ const registerUser = async (name: string, email: string, password: string): Prom
   });
   
   await newUser.save();
-  return newUser;
+  const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET as string, { expiresIn: "7d" });
+  return {token, user:newUser.name};
 };
 
 const loginUser = async (email: string, password: string): Promise<ILogin> => {
@@ -45,5 +47,12 @@ const getUserProfile = async (userId: string): Promise<IUser | null> => {
 const getAllUsers = async () => {
   return await User.find().select("-password");
 };
+const findUserBySearch = async (search: string): Promise<IUser[] | null> => {
+    const user = await User.find({
+      $or: [{ name: new RegExp(search, 'i') }, { email: new RegExp(search, 'i') }]
+    }).select(["-password","-groups"]);
 
-export default {registerUser, loginUser, getUserProfile,getAllUsers}
+    return user;
+};
+
+export default {registerUser, loginUser, getUserProfile,getAllUsers,findUserBySearch}

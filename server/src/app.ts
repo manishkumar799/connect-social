@@ -21,7 +21,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:5174",
-      "https://returnranger.ikshudigital.com",
+      "https://hm5dh3p7-5173.inc1.devtunnels.ms",
     ], // Your frontend URL
     credentials: true, // Allow cookies and headers to be sent
   })
@@ -32,7 +32,7 @@ app.use(responseFormatter);
 
 // Basic route
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello, TypeScript with Express!');
+  res.send('Hello!');
 });
 app.post('/api/auth/register',userController.registerUser);
 app.post('/api/auth/login',userController.loginUser);

@@ -1,9 +1,14 @@
-import axios from 'axios';
+import apiClient from "../../apiClient";
 
 // Define the login credentials and response types
 interface LoginCredentials {
   email: string;
   password: string;
+}
+interface RegisterCredentials {
+  email: string;
+  password: string;
+  name: string;
 }
 
 interface LoginResponse {
@@ -11,17 +16,13 @@ interface LoginResponse {
   user: string;
 }
 
-// Create an Axios instance for reuse
-const apiClient = axios.create({
-  baseURL: 'http://localhost:5000/api', // Change this to your actual API base URL
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-apiClient.defaults.withCredentials = true 
 
 // Login API call
 export const loginApi = async (credentials: LoginCredentials): Promise<LoginResponse> => {
   const response = await apiClient.post<LoginResponse>('/auth/login', credentials);
+  return response.data; // Axios automatically handles JSON responses
+};
+export const registerApi = async (credentials: RegisterCredentials): Promise<LoginResponse> => {
+  const response = await apiClient.post<LoginResponse>('/auth/register', credentials);
   return response.data; // Axios automatically handles JSON responses
 };

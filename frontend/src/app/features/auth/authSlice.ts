@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { loginApi } from './authApi'; // Import the loginApi function
+import { loginApi, registerApi } from './authApi'; // Import the loginApi function
 
 interface LoginResponse {
   token: string;
@@ -10,6 +10,12 @@ interface LoginCredentials {
   email: string;
   password: string;
 }
+interface RegisterCredentials {
+  email: string;
+  password: string;
+  name: string;
+}
+
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -39,6 +45,17 @@ export const login = createAsyncThunk(
     }
   }
 );
+export const register = createAsyncThunk(
+  'auth/register',
+  async (credentials: RegisterCredentials, { rejectWithValue }) => {
+    try {
+      const data = await registerApi(credentials); // Use the loginApi function from authApi.ts
+      return data; // Data contains the user and token
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || 'Register failed');
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -63,6 +80,20 @@ const authSlice = createSlice({
         state.token = action.payload.token;
       })
       .addCase(login.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(register.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(register.fulfilled, (state, action: PayloadAction<LoginResponse>) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+      })
+      .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

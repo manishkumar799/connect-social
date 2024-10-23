@@ -69,7 +69,7 @@ const ChatDetails: React.FC = () => {
       {/* Message Container */}
       <div
         //   ref={messageContainerRef}
-        className="flex flex-col gap-2 px-6 w-full items-end py-1"
+        className="flex flex-col gap-2 px-6 w-full justify-end items-end py-1"
         style={{
           // maxHeight: "auto",
           marginBottom: "65px",

@@ -6,5 +6,6 @@ const router = Router();
 // router.post("/login", userController.loginUser);
 router.get("/profile", userController.getUserProfile);
 router.get("/", userController.getAllUsers);
+router.get('/search', userController.getUserBySearch);
 
 export default router;

@@ -10,10 +10,7 @@ const initiateChat = async (currentUserId: string, newUserId: string) => {
     });
   
     if (chat) {
-      return {
-        message: "Chat already exists.",
-        chatId: chat._id,
-      };
+      return await Message.find({ chatId: chat._id }).sort({ timestamp: 1 }).populate("sender","name");
     } else {
       // If no chat exists, create a new one
       const newChat = new Chat({
@@ -22,10 +19,7 @@ const initiateChat = async (currentUserId: string, newUserId: string) => {
       });
   
       await newChat.save();
-      return {
-        message: "New chat initiated.",
-        chatId: newChat._id,
-      };
+      return [];
     }
   };
 
