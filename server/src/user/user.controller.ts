@@ -69,7 +69,7 @@ export const getUserBySearch = async (req: Request, res: Response, next: NextFun
     if (!search) {
       return res.status(400).json({ message: 'Please provide a search query.' });
     }
-    const user = await userService.findUserBySearch(search);
+    const user = await userService.findUserBySearch(search,req.user.id);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });

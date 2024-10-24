@@ -47,12 +47,16 @@ const getUserProfile = async (userId: string): Promise<IUser | null> => {
 const getAllUsers = async () => {
   return await User.find().select("-password");
 };
-const findUserBySearch = async (search: string): Promise<IUser[] | null> => {
-    const user = await User.find({
-      $or: [{ name: new RegExp(search, 'i') }, { email: new RegExp(search, 'i') }]
-    }).select(["-password","-groups"]);
+const findUserBySearch = async (search: string, excludeId: string): Promise<IUser[] | null> => {
+  const user = await User.find({
+      $and: [
+          { $or: [{ name: new RegExp(search, 'i') }, { email: new RegExp(search, 'i') }] },
+          { _id: { $ne: excludeId } } // Exclude user with given ID
+      ]
+  }).select(["-password", "-groups"]);
 
-    return user;
+  return user;
 };
+
 
 export default {registerUser, loginUser, getUserProfile,getAllUsers,findUserBySearch}
