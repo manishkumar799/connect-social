@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { logout } from './app/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from './hooks/useTypedSelector';
 // import ChatCard from './components/chat/ChatCard';
-import { allChats } from './app/features/chat/chatSlice';
+import { allChats, personalMessages, setRefresh } from './app/features/chat/chatSlice';
 import { getProfile } from './app/features/profile/profileSlice';
 import Body from './components/app/Body';
 import Header from './components/app/Header';
@@ -10,6 +10,7 @@ import Header from './components/app/Header';
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
+  const { refresh, selectedChatId } = useAppSelector((state) => state.chat)
   useEffect(() => {
     dispatch(allChats())
     dispatch(getProfile())
@@ -36,6 +37,11 @@ const App: React.FC = () => {
   }
   const onRefresh = () => {
     // dispatch(logout())
+    setRefresh(!refresh)
+    dispatch(allChats())
+    if (selectedChatId)
+      dispatch(personalMessages(selectedChatId))
+
   }
   return (
     <div className='p-2 h-[calc(var(--vh,1vh)*100)] flex flex-col overflow-hidden'>

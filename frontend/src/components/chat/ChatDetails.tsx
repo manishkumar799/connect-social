@@ -1,28 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import { useAppSelector, useAppDispatch } from '../../hooks/useTypedSelector';
+import React, { useState } from 'react';
 import { sendPersonalMessage } from '../../app/features/chat/chatSlice';
-import ChatHeader from './ChatHeader';
-import MessageInput from './MessageInput';
-import MessageContainer from './MessageContainer';
+import { useAppDispatch, useAppSelector } from '../../hooks/useTypedSelector';
 import Loader from '../Loader';
+import ChatHeader from './ChatHeader';
+import MessageContainer from './MessageContainer';
+import MessageInput from './MessageInput';
 
 const ChatDetails: React.FC = () => {
 
   const [showTime, setShowTime] = useState(false);
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState("")
-  const { personalMessages, recipientId } = useAppSelector((state) => state.chat);
-  const { chatName } = useAppSelector((state) => state.chat);
   const { _id } = useAppSelector((state) => state.profile);
-  const { loading } = useAppSelector((state) => state.chat);
-  useEffect(() => {
-    console.log(personalMessages)
-  }, [personalMessages])
+  const { loading, chatName, personalMessages, recipientId } = useAppSelector((state) => state.chat);
+
+
   const handleSendMessage = () => {
     if (!message.trim()) {
       return
     }
-    dispatch(sendPersonalMessage({ recipientId: recipientId, content: message }));
+    dispatch(sendPersonalMessage({ recipientId: recipientId, content: message }))
     setMessage("")
 
   }

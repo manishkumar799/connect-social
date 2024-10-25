@@ -50,7 +50,7 @@ interface IPersonalMessages {
   timestamp: string,
 }
 
-export const fetchPersonalMessagesApi = async (recipientId: string): Promise<IPersonalMessages[]> => {
+export const fetchPersonalMessagesApi = async (recipientId: string|null): Promise<IPersonalMessages[]> => {
   const response = await apiClient.get<IPersonalMessages[]>(`/chat/messages/personal/${recipientId}`)
   return response.data;
 }

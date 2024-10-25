@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks/useTypedSelector';
-import { personalMessages, setReceipientId, setChatName, setHidden } from '../../app/features/chat/chatSlice';
+import { personalMessages, setReceipientId, setChatName, setHidden, setChatType, setSelectedChatId } from '../../app/features/chat/chatSlice';
 import moment from 'moment';
 
 interface ChatProp {
@@ -22,11 +22,12 @@ const ChatCard: React.FC<ChatProp> = ({ chat }) => {
   const dispatch = useAppDispatch();
   const { _id } = useAppSelector((state) => state.profile);
   const userName: any = chat.members.filter((member) => member._id != _id)
-
   const handleChatMessage = () => {
     dispatch(personalMessages(userName[0]._id))
     dispatch(setReceipientId(userName[0]._id))
     dispatch(setChatName(userName[0].name))
+    dispatch(setChatType(userName[0].chatType))
+    dispatch(setSelectedChatId(userName[0]._id))
     dispatch(setHidden(true));
   }
   return (
